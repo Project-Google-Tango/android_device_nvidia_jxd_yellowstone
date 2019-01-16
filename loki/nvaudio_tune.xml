@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2013 NVIDIA Corporation.  All Rights Reserved.
+
+     NVIDIA Corporation and its licensors retain all intellectual property and
+     proprietary rights in and to this software and related documentation.  Any
+     use, reproduction, disclosure or distribution of this software and related
+     documentation without an express license agreement from NVIDIA Corporation
+     is strictly prohibited.
+ */
+-->
+<!DOCTYPE audio_tune [
+  <!ELEMENT audio_tune (normal, voip, vr)>
+  <!ELEMENT normal (out_speaker, out_headset, out_spk_hp, in_main, in_headset)>
+  <!ELEMENT voip (out_speaker, out_headset, out_spk_hp, in_main, in_headset)>
+  <!ELEMENT vr (out_speaker, out_headset, out_spk_hp, in_main, in_headset)>
+  <!ELEMENT out_speaker (ctl)>
+  <!ELEMENT out_headset (ctl)>
+  <!ELEMENT out_spk_hp (ctl)>
+  <!ELEMENT in_main (ctl)>
+  <!ELEMENT in_headset (ctl)>
+  <!ELEMENT ctl EMPTY>
+  <!ATTLIST ctl name CDATA #REQUIRED>
+  <!ATTLIST ctl val CDATA #REQUIRED>
+]>
+<!--
+     This file is used to declare various board specific audio configs
+-->
+
+<audio_tune>
+	<normal>
+		<out_speaker>
+			<ctl name="" value=""/>
+		</out_speaker>
+		<out_headset>
+		</out_headset>
+		<out_headphone>
+		</out_headphone>
+		<out_spk_hp>
+		</out_spk_hp>
+		<in_main>
+		</in_main>
+		<in_headset>
+		</in_headset>
+	</normal>
+	<voip>
+		<out_speaker>
+		</out_speaker>
+		<out_headset>
+		</out_headset>
+		<out_headphone>
+		</out_headphone>
+		<out_spk_hp>
+		</out_spk_hp>
+		<in_main>
+		</in_main>
+		<in_headset>
+		</in_headset>
+	</voip>
+	<vr>
+		<out_speaker>
+		</out_speaker>
+		<out_headset>
+		</out_headset>
+		<out_headphone>
+		</out_headphone>
+		<out_spk_hp>
+		</out_spk_hp>
+		<in_main>
+		</in_main>
+		<in_headset>
+		</in_headset>
+	</vr>
+</audio_tune>

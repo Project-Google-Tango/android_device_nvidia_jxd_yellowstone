@@ -1,0 +1,43 @@
+key 139   MENU              WAKE
+key 102   HOME              WAKE
+key 158   BACK              WAKE_DROPPED
+key 116   POWER             WAKE
+key 115   VOLUME_UP         WAKE_DROPPED
+key 114   VOLUME_DOWN       WAKE_DROPPED
+
+key 103    DPAD_UP
+key 105    DPAD_LEFT
+key 106    DPAD_RIGHT
+key 108    DPAD_DOWN
+
+key 0x130  BUTTON_A
+key 0x131  BUTTON_B
+key 0x133  BUTTON_X
+key 0x134  BUTTON_Y
+key 0x136  BUTTON_L1
+key 0x137  BUTTON_R1
+key 0x138  BUTTON_L2
+key 0x139  BUTTON_R2
+key 0x13a  BUTTON_SELECT
+key 0x13b  BUTTON_START
+key 0x13d  BUTTON_THUMBL
+key 0x13e  BUTTON_THUMBR
+
+axis 0x00 X
+axis 0x01 Y
+axis 0x02 Z
+axis 0x03 RX
+axis 0x04 RY
+axis 0x05 RZ
+axis 0x06 THROTTLE
+axis 0x07 RUDDER
+axis 0x08 WHEEL
+axis 0x09 GAS
+axis 0x0a BRAKE
+axis 0x10 HAT_X
+axis 0x11 HAT_Y
+
+#axis 0x00 X flat 4096
+#axis 0x01 Y flat 4096
+#axis 0x03 Z flat 4096
+#axis 0x04 RZ flat 4096

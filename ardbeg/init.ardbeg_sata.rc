@@ -1,0 +1,54 @@
+#Copyright (c) 2011-2013 NVIDIA Corporation.  All Rights Reserved.
+#
+#NVIDIA Corporation and its licensors retain all intellectual property and
+#proprietary rights in and to this software and related documentation.  Any
+#use, reproduction, disclosure or distribution of this software and related
+#documentation without an express license agreement from NVIDIA Corporation
+#is strictly prohibited.
+
+import init.t124_sata.rc
+import init.mmap_topdown.rc
+
+on early-init
+    # create LBH mountpoint
+    mkdir /lbh 0775 root system
+
+on fs
+    setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
+    setprop ro.crypto.umount_sd false
+    mount_all /fstab.ardbeg_sata
+    mount ext4 /dev/block/platform/tegra-sata.0/by-name/LBH /lbh wait ro
+
+on boot
+    # Create GPS folders and set its permissions
+    mkdir /data/gps
+    mkdir /data/lib_gps
+    chown gps system /data/gps/
+    chown gps system /data/lib_gps/
+    chmod 0770 /data/gps/
+    chmod 0770 /data/lib_gps/
+
+service lbh-setup /system/bin/init_lbh.sh
+    class main
+    user root
+    group root
+    oneshot
+
+# Start GPS daemon
+on boot
+    service gps-daemon /system/bin/glgps_nvidiaTegra2android -c /system/etc/gps/gpsconfig.xml
+    user gps
+    socket gps seqpacket 0660 gps system
+    group system inet sdcard_rw sdcard_r
+    class late_start
+    disabled
+
+on property:ro.nct.gps_id=0
+    write /sys/class/gpio/export 61
+    write /sys/class/gpio/gpio61/value 0
+    write /sys/class/gpio/gpio61/direction out
+    chown root system /sys/class/gpio/gpio61/value
+    chmod 0664 /sys/class/gpio/gpio61/value
+    write /sys/devices/platform/reg-userspace-consumer.2/state enabled
+    symlink /system/lib/hw/gps_brcm.tegra.so /data/lib_gps/gps.tegra.so
+    start gps-daemon

@@ -1,0 +1,22 @@
+ro.opengles.version = 131072
+wifi.interface=wlan0
+persist.tegra.nvmmlite = 1
+
+#NFC
+debug.nfc.fw_download=false
+debug.nfc.se=false
+
+# use glcomposer as the default compositor
+persist.tegra.compositor=glcomposer
+
+# usb vendor and product ID definition
+ro.nv.usb.vid = 0955
+ro.nv.usb.pid.mtp = 7102
+ro.nv.usb.pid.mtp.adb = 7100
+ro.nv.usb.pid.rndis = 7103
+ro.nv.usb.pid.rndis.adb = 7103
+ro.nv.usb.pid.ptp = 7102
+ro.nv.usb.pid.ptp.adb = 7100
+
+# lock screen config
+keyguard.no_require_sim = true

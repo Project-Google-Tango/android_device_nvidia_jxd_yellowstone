@@ -1,0 +1,75 @@
+// TN8-FFD Boilerplate NCT
+// version field (V1.0)
+<version:0x00010000>
+// vendor ID, product ID field
+<vid:0x955; pid:0x1001>
+// revision field
+<revision:39>
+// entry will be started at 0x4000
+<offset:0x4000>
+//-----------------------------------------------
+// comment
+// tag info
+// 0x10 : 1byte data , 0x1A : 1byte data array
+// 0x20 : 2bytes data, 0x2A : 2bytes data array
+// 0x40 : 4bytes data, 0x4A : 4bytes data array
+// 0x80 : string     , 0x8A : string array
+//-----------------------------------------------
+// name is just for identification (we won't use name in parser)
+//
+//typedef struct
+//{
+//    unsigned int proc_board_id;
+//    unsigned int proc_sku;
+//    unsigned int proc_fab;
+//    unsigned int pmu_board_id;
+//    unsigned int pmu_sku;
+//    unsigned int pmu_fab;
+//    unsigned int display_board_id;
+//    unsigned int display_sku;
+//    unsigned int display_fab;
+//} nct_board_info_type;
+//
+// Defines for Proc board ids
+//#define SHIELD_ERS_E1780          0x6F4        // E1780
+//#define SHIELD_ERS_E1792          0x700        // E1792
+//#define SHIELD_ERS_E1782          0x6f6        // E1782
+//#define SHIELD_ERS_E1791          0x6ff        // E1791
+//#define SHIELD_ERS_S_E1783        0x6f7        // E1783
+//#define DSC_ERS_S_E1781           0x6F5        // E1781
+//#define LAGUNA_ERS_PM358          0x166        // PM358
+//#define LAGUNA_ERS_S_PM359        0x167        // PM359
+//#define LAGUNA_FFD_PM363          0x16B        // PM363
+//#define LAGUNA_FFD_PM374          0x176        // PM374
+//#define LAGUNA_FFD_PM370          0x172        // PM370
+//#define LOKI_NFF_E2548            0x9F4        // E2548
+//#define LOKI_NFF_E2549            0x9F5        // E2549
+//#define LOKI_FFD_P2530            0x9E2        // P2530
+//#define TN8_FFD_P1761             0x6E1        // P1761
+//#define TN8_E1784                 0x6F8        // E1784
+//#define TN8_E1922                 0x782        // E1922
+//#define TN8_E1923                 0x783        // E1923
+//
+//// Defines for I2c slave addresses
+//#define PMU_EEPROM_I2C_SLAVE_ADDR   0xAA
+//#define TPS65913_I2C_SLAVE_ADDR     0xB0
+//#define AS3722_I2C_SLAVE_ADDR       0x80
+//
+//// Defines for Pmu Board Ids
+//#define PMU_BOARD_E1733             0x6C5    // AMS3722 module
+//#define PMU_BOARD_E1734             0x6C6    // AMS3722 module
+//#define PMU_BOARD_E1735             0x6C7    // TI 913/4 + OpenVR
+//#define PMU_BOARD_E1736             0x6C8    // TI 913/4
+//#define PMU_BOARD_E1769             0x6E9    // TI 913/4
+//#define PMU_BOARD_E1936             0x790    // TI 913/4
+//
+
+
+<name:serial_number;     idx:0;  tag:0x80; data:192012016000001>
+<name:cm_id;             idx:3;  tag:0x20; data:0x0000>
+<name:lbh_id;            idx:4;  tag:0x20; data:0x0000>
+<name:factory_mode;      idx:5;  tag:0x40; data:0>
+<name:ramdump;           idx:6;  tag:0x40; data:0>
+<name:board_info;        idx:8;  tag:0x4A; data:1780; data:0; data:0;data:1769; data:0; data:0; data:1807; data:0; data:0 >
+<name:gps_id;            idx:9;  tag:0x20; data:0x0000>
+<name:emc_id;            idx:17;  tag:0x20; data:0x2>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<edp_policy version="1.0">
+    <hardware name="tn8"/>
+    <device name="backlight"> <!-- limit: integer percent units 0% to 100% -->
+        <charging limit="100"/>
+        <above level="20" limit="100"/>
+        <below level="20" limit="75"/>
+        <above level="15" limit="75"/>
+        <below level="15" limit="65"/>
+    </device>
+    <device name="audio_volume"> <!-- limit: integer percent units 0% to 100% -->
+        <charging limit="100"/>
+        <above level="20" limit="100"/>
+        <below level="20" limit="75"/>
+        <below level="15" limit="60"/>
+    </device>
+</edp_policy>
