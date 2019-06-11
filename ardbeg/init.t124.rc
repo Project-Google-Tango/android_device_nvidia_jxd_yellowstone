@@ -17,6 +17,8 @@ on init
     mkdir /storage/emulated 0555 root root
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
     mkdir /storage/sdcard1 0700 root root
+    mkdir /persist 0771 system system
+    mkdir /persistbk 0771 system system
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
@@ -44,9 +46,6 @@ on post-fs-data
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/firmware 0770 wifi wifi
     chmod 0644 /persist/wifi_mac.txt root root
-    symlink /system/vendor/firmware/bcm43341/fw_bcmdhd.bin /data/misc/wifi/firmware/fw_bcmdhd.bin
-    symlink /system/vendor/firmware/bcm43341/fw_bcmdhd_a0.bin /data/misc/wifi/firmware/fw_bcmdhd_a0.bin
-    symlink /system/etc/nvram_43341_rev4.txt /data/misc/wifi/firmware/nvram.txt
     insmod /system/lib/modules/bcmdhd.ko
     setprop wifi.supplicant wpa_suppl_nl
     mkdir /data/misc/dhcp 0770 dhcp dhcp
@@ -71,12 +70,51 @@ on post-fs-data
     # create directory for camera calibration data
     mkdir /mnt/factory/camera 0666 system system
 
+    # create directory for camera log
+    mkdir /persist/camera 0777 system system
+
     # cpu volt cap
     mkdir /data/misc/cvc 0774 system system
 
     #create gps files
+    mkdir /data/gps
+    chown gps system /data/gps/
+    chmod 0770 /data/gps/
 
+    chmod 0600 /dev/bcm2079x
+    chown nfc nfc /dev/bcm2079x
+    mkdir /data/nfc
+    mkdir /data/nfc/param
+    chmod 0700 /data/nfc
+    chmod 0700 /data/nfc/param
+    chown nfc nfc /data/nfc
+    chown nfc nfc /data/nfc/param
+    symlink /system/etc/libnfc-brcm.conf /data/nfc/libnfc-brcm.conf
 
+    chown system system /persist
+    chmod 0771 /persist
+
+    start start-gps
+
+    service start-gps /system/bin/gps_select.sh
+        user root
+        group root
+        class late_start
+        oneshot
+
+    service sensorhubd /system/bin/sensorhubd
+        class main
+        user root
+
+    start wifiloader
+
+# wifiloader - set the wifi commchip_id accordingly
+service wifiloader /system/bin/wifi_loader.sh
+    class main
+    user root
+    group root
+    oneshot
+    disabled
 
 # Set up HDCP
 import init.hdcp.rc
@@ -103,8 +141,9 @@ on boot
     # bluetooth MAC address programming
     chown bluetooth net_bt_stack ro.bt.bdaddr_path
     chown bluetooth net_bt_stack /system/etc/bluetooth
-    chown bluetooth net_bt_stack /mnt/factory/bt_mac.txt
-    setprop ro.bt.bdaddr_path "/mnt/factory/bt_mac.txt"
+
+# NFC
+   setprop ro.nfc.port "I2C"
 
 # backlight
     chown system system /sys/class/backlight/pwm-backlight/brightness
@@ -127,6 +166,10 @@ on boot
     chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
     chown system system /sys/devices/platform/host1x/gk20a.0/enable_3d_scaling
 
+# perf tuning
+    write /sys/module/nvhost_gk20a/parameters/medium_priority 128
+    write /sys/module/nvhost_gk20a/parameters/high_priority 1024
+
 # audio
     chmod 0664 /sys/power/suspend/mode
     chown system audio /sys/power/suspend/mode
@@ -139,35 +182,6 @@ on boot
     chown system system /sys/devices/platform/tegra_wakeup_monitor/init_ports
     chown system system /sys/devices/platform/tegra_wakeup_monitor/add_ports
     chown system system /sys/devices/platform/tegra_wakeup_monitor/del_ports
-
-# Sensor
-    insmod /system/lib/modules/inv-mpu.ko
-
-	chmod 0666 /dev/key_daemon
-    chown system system /sys/class/invensense/mpu/accl_enable
-    chown system system /sys/class/invensense/mpu/accl_fifo_enable
-    chown system system /sys/class/invensense/mpu/accl_delay
-    chown system system /sys/class/invensense/mpu/accl_max_range
-    chown system system /sys/class/invensense/mpu/enable
-    chown system system /sys/class/invensense/mpu/gyro_enable
-    chown system system /sys/class/invensense/mpu/gyro_fifo_enable
-    chown system system /sys/class/invensense/mpu/gyro_delay
-    chown system system /sys/class/invensense/mpu/gyro_max_range
-    chown system system /sys/class/invensense/mpu/lpa_delay
-    chown system system /sys/class/invensense/mpu/motion_enable
-    chown system system /sys/class/invensense/mpu/motion_threshold
-    chown system system /sys/class/invensense/mpu/power_state
-    chown system system /sys/class/invensense/mpu/key
-
-    chown system system /sys/class/invensense/mpu/akm89xx/akm89xx/enable
-    chown system system /sys/class/invensense/mpu/akm89xx/akm89xx/delay
-    chown system system /sys/class/invensense/mpu/akm89xx/akm89xx/max_range
-    chown system system /sys/class/invensense/mpu/akm89xx/akm89xx/resolution
-
-    chown system system /sys/class/invensense/mpu/bmpX80/bmpX80/enable
-    chown system system /sys/class/invensense/mpu/bmpX80/bmpX80/delay
-    chown system system /sys/class/invensense/mpu/bmpX80/bmpX80/max_range
-    chown system system /sys/class/invensense/mpu/bmpX80/bmpX80/resolution
 
     chown system system /sys/class/sensors/light/device/amb_clear
 
@@ -197,7 +211,6 @@ on boot
     chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
     chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
     chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
-    write /sys/devices/system/cpu/cpufreq/interactive/io_busy_threshold 50
 
     write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/down_delay 500
     write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/idle_top_freq 204000
@@ -212,6 +225,8 @@ on boot
     write /sys/devices/system/cpu/cpuquiet/current_governor runnable
     write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/enable 1
 
+    write /sys/module/tegra12_emc/parameters/pasr_enable 1
+
     # TBD: Remove the below line that give permissions for scaling_governor
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chown system system /sys/devices/tegradc.0/enable
@@ -219,6 +234,12 @@ on boot
     chown system system /sys/devices/platform/host1x/nvavp/boost_sclk
     chown system system /sys/class/input/input1/enabled
     chown system system /sys/class/input/input2/enabled
+
+# Thermal log
+    chown system system /sys/class/thermal/record_thermal
+    chown system system /sys/class/thermal/record_thermal_polling
+    chmod 0664 /sys/class/thermal/record_thermal
+    chmod 0664 /sys/class/thermal/record_thermal_polling
 
 # nvdps
     chown system system /sys/class/graphics/fb0/device/nvdps
@@ -258,56 +279,8 @@ service set_sensor_perm /system/bin/set_light_sensor_perm.sh
     class main
     user root
     group root
-    oneshot
+    disabled
 
-on property:ro.debuggable=1
-    # Invensense interface
-    chmod 0666 /sys/class/invensense/mpu/accl_bias
-    chmod 0666 /sys/class/invensense/mpu/accl_enable
-    chmod 0666 /sys/class/invensense/mpu/accl_fifo_enable
-    chmod 0666 /sys/class/invensense/mpu/accl_fs
-    chmod 0666 /sys/class/invensense/mpu/accl_matrix
-    chmod 0666 /sys/class/invensense/mpu/clock_source
-    chmod 0666 /sys/class/invensense/mpu/compass_enable
-    chmod 0666 /sys/class/invensense/mpu/compass_matrix
-    chmod 0666 /sys/class/invensense/mpu/compass_scale
-    chmod 0666 /sys/class/invensense/mpu/dev
-    chmod 0666 /sys/class/invensense/mpu/dmp_firmware
-    chmod 0666 /sys/class/invensense/mpu/enable
-    chmod 0666 /sys/class/invensense/mpu/fifo_rate
-    chmod 0666 /sys/class/invensense/mpu/firmware_loaded
-    chmod 0666 /sys/class/invensense/mpu/flick_axis
-    chmod 0666 /sys/class/invensense/mpu/flick_counter
-    chmod 0666 /sys/class/invensense/mpu/flick_int_on
-    chmod 0666 /sys/class/invensense/mpu/flick_lower
-    chmod 0666 /sys/class/invensense/mpu/flick_message_on
-    chmod 0666 /sys/class/invensense/mpu/flick_upper
-    chmod 0666 /sys/class/invensense/mpu/gyro_enable
-    chmod 0666 /sys/class/invensense/mpu/gyro_fifo_enable
-    chmod 0666 /sys/class/invensense/mpu/gyro_fs
-    chmod 0666 /sys/class/invensense/mpu/gyro_matrix
-    chmod 0666 /sys/class/invensense/mpu/key
-    chmod 0666 /sys/class/invensense/mpu/lpa_freq
-    chmod 0666 /sys/class/invensense/mpu/lpa_mode
-    chmod 0666 /sys/class/invensense/mpu/pedometer_steps
-    chmod 0666 /sys/class/invensense/mpu/pedometer_time
-    chmod 0666 /sys/class/invensense/mpu/power
-    chmod 0666 /sys/class/invensense/mpu/power_state
-    chmod 0666 /sys/class/invensense/mpu/raw_accl
-    chmod 0666 /sys/class/invensense/mpu/raw_gyro
-    chmod 0666 /sys/class/invensense/mpu/reg_dump
-    chmod 0666 /sys/class/invensense/mpu/self_test
-    chmod 0666 /sys/class/invensense/mpu/temp_offset
-    chmod 0666 /sys/class/invensense/mpu/temp_scale
-    chmod 0666 /sys/class/invensense/mpu/temperature
-    chmod 0666 /sys/class/invensense/mpu/uevent
-
-    # Invensense debug register interface.
-    chmod 0666 /sys/class/invensense/mpu/dbg_reg
-    chmod 0666 /sys/class/invensense/mpu/dbg_dat
-
-
-   	
 on property:ro.debuggable=1
     # EMC debug interface
     chmod 666 /sys/kernel/debug/tegra_emc/eack_state
@@ -375,6 +348,47 @@ service bugreport /system/bin/dumpstate -d -p -B -o /data/data/com.android.shell
     disabled
     oneshot
     keycodes 115 114
+
+#check if need to resize persist partition
+service ck_pes_size /system/bin/sh /system/etc/ck_file_sys_size.sh
+    class core
+    user root
+    oneshot
+
+#check if need to restore persist partition
+service check_bk_cookie /system/bin/sh /system/etc/persist_setbackup.sh "init"
+    class late_start
+    user root
+    oneshot
+    disabled
+
+#check if need to restore file
+service check_dp_cal /system/bin/sh /system/etc/copy_dp_cal.sh "init"
+    class late_start
+    user root
+    oneshot
+    disabled
+
+#read then set property at startup
+service op_property /system/bin/sh /system/etc/op_property.sh r
+    class late_start
+    user root
+    oneshot
+    disabled
+
+#wirte property_custsn into fuse
+service trf_sn /system/bin/sh /system/etc/trf_sn.sh
+    class late_start
+    user root
+    oneshot
+    disabled
+
+on property:pes_mount_ok=1
+    start op_property
+    start set_sensor_perm
+    start check_bk_cookie
+    start check_dp_cal
+    start trf_sn
 
 # Mount usb drives as /usbdrive. Generally usb drives are formatted with FAT
 # filesystem, so we support FAT as of now.
@@ -485,7 +499,3 @@ service tango_service /system/bin/tango_service
     class main
     user root
     group root
-
-on fs
-# mount console ramooops
-   mount pstore pstore /sys/fs/pstore

@@ -69,8 +69,8 @@ WIFI_DRIVER_MODULE_NAME     := "bcmdhd"
 # GPS
 BOARD_HAVE_GPS_BCM := true
 BOARD_GPS_LIBRARIES := true
-#  MTK_GPS_CHIP := MTK_GPS_MT3332
-# MTK_GPS_SUPPORT := yes
+MTK_GPS_CHIP := MTK_GPS_MT3332
+MTK_GPS_SUPPORT := yes
 
 # Default HDMI mirror mode
 # Crop (default) picks closest mode, crops to screen resolution

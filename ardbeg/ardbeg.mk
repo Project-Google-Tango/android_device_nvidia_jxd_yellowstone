@@ -33,12 +33,12 @@ PRODUCT_MODEL := Yellowstone
 PRODUCT_MANUFACTURER := Google
 PRODUCT_BRAND := Google
 
-include vendor/google/products/gms.mk
+include vendor/google/gapps/products/gms.mk
 
 ## The base dtb file name used for this product
 TARGET_KERNEL_DT_NAME := tegra124-ardbeg
 
-PRODUCT_COPY_FILES += vendor/nvidia/tegra/3rdparty/broadcom/gps/bin/gpsconfig-ardbeg.xml:system/etc/gps/gpsconfig.xml \
+PRODUCT_COPY_FILES += vendor/nvidia/tegra/3rdparty/broadcom/gps/bin/gpsconfig-yellowstone.xml:system/etc/gps/gpsconfig.xml \
                       frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
                       frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
 					  system/media/bootanimation.zip:system/media/bootanimation.zip
@@ -56,6 +56,8 @@ PRODUCT_COPY_FILES += \
         $(call add-to-product-copy-files-if-exists, $(LOCAL_PATH)/init.icera.rc:root/init.icera.rc)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.modem.do=1
+
+PRODUCT_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-tablet-do
 
 ## GMS apps
 $(call inherit-product-if-exists, 3rdparty/google/gms-apps/products/gms.mk)

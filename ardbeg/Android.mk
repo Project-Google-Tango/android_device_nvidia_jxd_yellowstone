@@ -16,8 +16,7 @@ ifeq ($(REFERENCE_DEVICE),ardbeg)
 LOCAL_PATH := $(my-dir)
 subdir_makefiles := \
 	$(LOCAL_PATH)/liblights/Android.mk \
-	$(LOCAL_PATH)/power/Android.mk \
-	$(LOCAL_PATH)/sensors/Android.mk
+	$(LOCAL_PATH)/power/Android.mk
 
 ifeq ($(BOARD_HAVE_LBH_SUPPORT), true)
 LBH_MAKEFILE := $(TOP)/vendor/nvidia/fury/tools/lbh/AndroidLBH.mk

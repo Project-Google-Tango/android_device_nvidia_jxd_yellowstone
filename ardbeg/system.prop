@@ -40,3 +40,8 @@ ro.nv.usb.pid.ptp.adb = 7100
 
 ro.product.version=1.0.4
 ro.product.ota.host=s192ota.jxd.hk:2300
+
+# enable auto sensorhub update
+persist.sensorhubd.update = 1
+
+qemu.hw.mainkeys=0

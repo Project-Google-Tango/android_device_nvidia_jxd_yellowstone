@@ -17,6 +17,7 @@ $(call inherit-product-if-exists, vendor/nvidia/tegra/secureos/nvsi/nvsi.mk)
 $(call inherit-product-if-exists, frameworks/base/data/videos/VideoPackage2.mk)
 $(call inherit-product-if-exists, frameworks/base/data/sounds/AudioPackage3.mk)
 $(call inherit-product-if-exists, vendor/nvidia/tegra/core/nvidia-tegra-vendor.mk)
+$(call inherit-product-if-exists, vendor/google/yellowstone/yellowstone-vendor.mk)
 $(call inherit-product-if-exists, vendor/nvidia/tegra/ardbeg/partition-data/factory-ramdisk/factory.mk)
 
 include frameworks/native/build/tablet-10in-hdpi-2048-dalvik-heap.mk
@@ -149,6 +150,9 @@ PRODUCT_COPY_FILES += \
   $(LOCAL_PATH)/../common/set_light_sensor_perm.sh:system/bin/set_light_sensor_perm.sh \
   $(LOCAL_PATH)/../common/comms/marvel_wpa.conf:/system/etc/firmware/marvel_wpa.conf \
   $(LOCAL_PATH)/../common/comms/marvel_p2p.conf:/system/etc/firmware/marvel_p2p.conf
+
+PRODUCT_COPY_FILES += \
+  $(LOCAL_PATH)/wifi_loader.sh:system/bin/wifi_loader.sh
 
 PRODUCT_COPY_FILES += \
   $(LOCAL_PATH)/../common/init_lbh.sh:system/bin/init_lbh.sh
@@ -338,7 +342,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     tos.img
 PRODUCT_PACKAGES += \
-    GameMap \
+    busybox \
     Camera2 \
     Launcher2 \
     KeyMaster
@@ -386,10 +390,10 @@ endif
 endif
 
 # Include ShieldTech
-ifeq ($(NV_ANDROID_FRAMEWORK_ENHANCEMENTS),TRUE)
-SHIELDTECH_FEATURE_BLAKE := false
-SHIELDTECH_FEATURE_KEYBOARD := false
-SHIELDTECH_FEATURE_NVGALLERY := false
-$(call inherit-product-if-exists, vendor/nvidia/shieldtech/common/shieldtech.mk)
-endif
+#ifeq ($(NV_ANDROID_FRAMEWORK_ENHANCEMENTS),TRUE)
+#SHIELDTECH_FEATURE_BLAKE := true
+#SHIELDTECH_FEATURE_KEYBOARD := true
+#SHIELDTECH_FEATURE_NVGALLERY := true
+#$(call inherit-product-if-exists, vendor/nvidia/shieldtech/common/shieldtech.mk)
+#endif
 

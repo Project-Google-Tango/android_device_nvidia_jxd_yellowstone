@@ -7,16 +7,19 @@
 /dev/tegra_rpc  0660    media   media
 /dev/tegra_sema	0660    media   media
 /dev/tegra_mediaserver  0660    media   media
+/dev/cam_ts*    0660    media   camera
+/dev/sh_*       0660    system  system
 /dev/ov2710     0660    media   camera
 /dev/imx091     0660    media   camera
 /dev/ov7695     0660    media   camera
 /dev/mt9m114    0660    media   camera
 /dev/ov9772     0660    media   camera
 /dev/imx135     0660    media   camera
-/dev/imx179     0660    media   camera
 /dev/ar0261     0660    media   camera
-/dev/ov5693*    0660    media   camera
-/dev/sp2529     0660    media   camera
+/dev/ov4682     0660    media   camera
+/dev/ov7251     0660    media   camera
+/dev/ov9762	0660	media	camera
+/dev/ov5693*     0660    media   camera
 /dev/tegra_camera 0660  media   camera
 /dev/camera*    0660    media   camera
 /dev/focuser*   0660    media   camera
@@ -28,7 +31,7 @@
 /dev/tegra_dc*  0660    system  system
 /dev/ttyACM*    0660    radio   system
 /dev/ttyACM2    0660    media   system
-/dev/ttyACM3    0660    radio   log
+/dev/ttyGS*     0660    radio   system
 /dev/nvhdcp0    0666    system  system
 /dev/nvhdcp1    0660    system  system
 /dev/nvhost-vi         0660   media  camera
@@ -51,6 +54,7 @@
 /dev/tlk_device 0660    system  drmrpc
 /dev/ttyHS1	0660	root	system
 /dev/ttyHS2	0660	bluetooth	bluetooth
+/dev/ttyTHS0	0660	root	system
 /dev/ttyTHS1	0660	root	system
 /dev/ttyTHS2	0660	bluetooth	bluetooth
 #for FM V4L2 Radio
@@ -62,6 +66,9 @@
 /dev/raydium_ts 0660    system  system
 /dev/ion        0666    system  system
 /dev/timerinfo  0440    system  system
+/dev/constraint_cpu_freq 0660 root system
+/dev/constraint_gpu_freq 0660 root system
+/dev/constraint_online_cpus 0660 root system
 /dev/cpu_freq_min	0660	system	system
 /dev/cpu_freq_max	0660	system	system
 /dev/gpu_freq_min	0660	system	system
@@ -74,4 +81,27 @@
 /sys/devices/virtual/input/input*	enabled	0660	system	system
 /dev/gps	0664	system	system
 /sys/power/sysedp/consumers/icemdm state 0660 radio system
-/dev/input/event*   0777    system  input
+
+# sensors
+/dev/iio:device*                                                                0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 cci_cali_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 cci_cali_init 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 cci_test_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_integration_time 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_max_range 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_power_consumed 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_raw 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_regulator_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.0/i2c-0/0-0010/iio:device0 in_illuminance_resolution 0660    system  system
+
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 cci_cali_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 cci_cali_init 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 cci_test_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_integration_time 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_max_range 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_power_consumed 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_raw 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_regulator_enable 0660    system  system
+/sys/devices/platform/tegra12-i2c.1/i2c-1/1-0044/iio:device1 in_illuminance_resolution 0660    system  system
